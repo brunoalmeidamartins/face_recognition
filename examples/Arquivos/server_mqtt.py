@@ -53,12 +53,14 @@ def on_message_server(client, userdata, message):
 
         # client.publish('test',1,1) # Enviando 1 para avisar o raspberry para tirar a foto
         # time.sleep(10) # Esperando o recebimento da foto
-
+clientFoto = mqtt.client()
 client = mqtt.Client()
 client.on_message=on_message_server
-
+clientFoto.on_message=on_message_server
 client.connect('localhost',1883,60)
+clientFoto.connect('localhost', 1883, 60)
 
 client.subscribe('test', 1)
-
+clientFoto.subscribe('foto', 1)
+clientFoto.loop_forever()
 client.loop_forever()

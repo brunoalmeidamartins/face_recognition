@@ -2,11 +2,20 @@ import face_recognition
 import json
 import os
 import time
+import paho.mqtt.client as mqtt
 #Obtendo Imagens do Banco de BancoDadosFotos
 path_caminho_banco_fotos = '/home/administrador/face_recognition/examples/BancoDadosFotos/'
 path_caminho_banco_token = '/home/administrador/face_recognition/examples/BancoDadosToken/tokens.json'
 nome_pessoa = ''
 token_recebido = ''
+
+# Conexao com broker
+client = mqtt.Client()
+client.connect('192.168.43.218',1883,60)
+def conecta_broker(msg):
+    client.publish('test',str(self.msg))
+
+
 
 #Limpando a pasta
 def limpa_pasta_arquivos():
@@ -59,6 +68,10 @@ while (num == 0): # trocar por true
             limpa_pasta_arquivos()
             break
         print("Aguardando a autenticacao por foto ...")
+        #client = mqtt.Client()
+        #client.connect('192.168.43.218',1883,60)
+        #client.publish('test','c')
+        
         time.sleep(10)
         print("Acabou o tempo!! Analisando se a foto chegou ...")
         #Aguarda ate a foto chegar
@@ -78,7 +91,11 @@ while (num == 0): # trocar por true
 
                     #Comparacao das Imagens
                     biden_encoding = face_recognition.face_encodings(known_image)[0]
-                    unknown_encoding = face_recognition.face_encodings(unknown_image)[0]
+                    try:
+                        unknown_encoding = face_recognition.face_encodings(unknown_image)[0]
+                    except Exception as e:
+                        limpa_pasta_arquivos()
+                        break
 
 
                     #Resultado da comparacao
@@ -93,7 +110,7 @@ while (num == 0): # trocar por true
 
 
             #Envia comando para abrir porta se toke e face estao contidos no Banco
-            print("Foto analisando!! Enviando resposta ...")
+            print("Analisando Foto!! Enviando resposta ...")
             time.sleep(2)
             if banco_contem_token == True and face_usuario_encontrada == True:
                 print('Seja Bem vindo:'+nome_usuario)
