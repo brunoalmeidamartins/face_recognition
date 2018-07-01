@@ -12,8 +12,8 @@ token_recebido = ''
 # Conexao com broker
 client = mqtt.Client()
 client.connect('192.168.43.218',1883,60)
-def conecta_broker(msg):
-    client.publish('test',str(self.msg))
+def envia_msg_broker(msg):
+    client.publish('test',msg)
 
 
 
@@ -33,6 +33,7 @@ print('Inicie o Processo')
 while (num == 0): # trocar por true
     time.sleep(2)
     if len(os.listdir('/home/administrador/face_recognition/examples/FotoRecebida/')) == 1 and num != 1:
+        token_nao_cadastrado = False
         print("Token recebido!! Analisando ...")
         try:
             arquivo_json = open('/home/administrador/face_recognition/examples/FotoRecebida/token.json', 'r')
@@ -66,15 +67,18 @@ while (num == 0): # trocar por true
         else:
             print("Nao esta no banco")
             limpa_pasta_arquivos()
-            break
-        print("Aguardando a autenticacao por foto ...")
-        #client = mqtt.Client()
-        #client.connect('192.168.43.218',1883,60)
-        #client.publish('test','c')
-        
-        time.sleep(10)
-        print("Acabou o tempo!! Analisando se a foto chegou ...")
-        #Aguarda ate a foto chegar
+            envia_msg_broker('e')
+            token_nao_cadastrado = True
+            pass
+        if (not token_nao_cadastrado):
+            print("Aguardando a autenticacao por foto ...")
+            #client = mqtt.Client()
+            #client.connect('192.168.43.218',1883,60)
+            #client.publish('test','c')
+            envia_msg_broker('f') #Envia msg para tirar foto
+            time.sleep(10)
+            print("Acabou o tempo!! Analisando se a foto chegou ...")
+            #Aguarda ate a foto chegar
         if (len(os.listdir('/home/administrador/face_recognition/examples/FotoRecebida/')) == 2):
             #Verificando a foto do usuario depois que ela for tirada
             face_usuario_encontrada = False
@@ -107,6 +111,13 @@ while (num == 0): # trocar por true
                         break
             else:
                 print("Token nao esta no banco!! Acesso Negado")
+                limpa_pasta_arquivos()
+
+                envia_msg_broker('e') #Envia comando de erro para broker
+
+                continue
+
+
 
 
             #Envia comando para abrir porta se toke e face estao contidos no Banco
@@ -115,6 +126,9 @@ while (num == 0): # trocar por true
             if banco_contem_token == True and face_usuario_encontrada == True:
                 print('Seja Bem vindo:'+nome_usuario)
                 print("Envia comando para abrir a porta!!")
+
+                envia_msg_broker('a') # Envia comando para abrir a porta para o broker
+
                 time.sleep(5)
                 os.system('clear')
                 print("Inicie o processo novamente")
@@ -122,6 +136,9 @@ while (num == 0): # trocar por true
             else:
                 print("Falha na autenticação!!!")
                 print("Envia comando para não abrir a porta")
+
+                envia_msg_broker('e') #Envia comando de erro para o broker
+
                 time.sleep(5)
                 os.system('clear')
                 print("Inicie o processo novamente")
@@ -130,6 +147,9 @@ while (num == 0): # trocar por true
         else:
             print("Tempo de espera acabou e a foto nao foi tirada")
             print("Reinicie o processo")
+
+            envia_msg_broker('e') #Envia comando de erro para broker
+
             print(" ")
             time.sleep(3)
             os.system('clear')
@@ -140,6 +160,9 @@ while (num == 0): # trocar por true
         if len(os.listdir('/home/administrador/face_recognition/examples/FotoRecebida/')) > 0:
             limpa_pasta_arquivos()
             print('Comece o processo novamente')
+
+            envia_msg_broker('e') #Envia comando de erro para broker
+
         continue
 
 """
