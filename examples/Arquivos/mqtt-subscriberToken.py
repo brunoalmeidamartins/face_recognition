@@ -19,8 +19,8 @@ client.connect('localhost',1883,60)
 client.loop_start()
 #for i in range(100):
 try:
-    #client.publish('test',"'A6 44 6D 8B'",1) #Bruno_Martins
-    client.publish('test',"'85 6C 53 02'",1) # Victor
+    client.publish('test',"'A6 44 6D 8B'",1) #Bruno_Martins
+    #client.publish('test',"'85 6C 53 02'",1) # Victor
     #client.publish('test',"'B6 44 6D 8B'",1) #Token errado
     #client.publish('test',json.dumps({'token':'9371937povdad'}))
     # client.publish('test','onfnnfa',1)

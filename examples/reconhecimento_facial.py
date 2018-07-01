@@ -32,7 +32,7 @@ def envia_msg_adafruit(msg): ##Envia msg online
 def envia_msg_log_adafruit(msg): ## Envia log para adafruit online
     now = datetime.now()
     string = (str(now.day) +'/'+str(now.month)+'/'+str(now.year)+' '+str(now.hour)+':'+str(now.minute)+':'+str(now.second))
-    aio.send('test',msg + string )
+    aio.send('Log',msg + string )
 
 
 
@@ -62,6 +62,7 @@ while (num == 0): # trocar por true
         time.sleep(3)
         aio.send('Botao_Porta','Fechada')
         aio.send('test','Porta Fechada')
+        envia_msg_log_adafruit('Porta Aberta Externamente! ')
         time.sleep(2)
         os.system('clear')
         print("Inicie o processo novamente")
