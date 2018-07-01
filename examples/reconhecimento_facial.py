@@ -3,6 +3,8 @@ import json
 import os
 import time
 import paho.mqtt.client as mqtt
+
+from Adafruit_IO import * ##Enviar os dados para Adafruit
 #Obtendo Imagens do Banco de BancoDadosFotos
 path_caminho_banco_fotos = '/home/administrador/face_recognition/examples/BancoDadosFotos/'
 path_caminho_banco_token = '/home/administrador/face_recognition/examples/BancoDadosToken/tokens.json'
