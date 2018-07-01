@@ -54,16 +54,17 @@ def on_message_server(client, userdata, message):
             pass
         # Se for um caracter de erro ou aprovação será armazenado um log
         else:
+            print("Estou aqui!!!")
             number = len(os.listdir('/home/administrador/face_recognition/examples/BancoDadosFotos/FotoLog/'))
 
             foto_test = True
             try:
                 os.rename('/home/administrador/face_recognition/examples/FotoRecebida/foto00.jpg',
-                        '/home/administrador/face_recognition/examplesBancoDadosFotos/FotoLog/foto'+str(number)+'.jpg')
+                        '/home/administrador/face_recognition/examples/BancoDadosFotos/FotoLog/foto'+str(number)+'.jpg')
             except Exception as erro:
                 foto_test = False
                 print(e)
-                print(Foto nao retirada)
+                print('Foto nao retirada')
 
             last_log = json.loads(open('/home/administrador/face_recognition/examples/FotoRecebida/token.json').read())
 
@@ -76,8 +77,8 @@ def on_message_server(client, userdata, message):
             last_log['valido'] = valido
 
             # Se foi salva uma foto ele prepara o log com o seu caminho no banco de fotos
-            if (foto_test)
-                last_log[imagem] = '/home/administrador/face_recognition/examplesBancoDadosFotos/FotoLog/foto'+str(number)+'.jpg'
+            if (foto_test):
+                last_log[imagem] = '/home/administrador/face_recognition/examples/BancoDadosFotos/FotoLog/foto'+str(number)+'.jpg'
             else:
                 last_log[imagem] = 'NaN'
 
